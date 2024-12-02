@@ -1,0 +1,31 @@
+version: '3.9'
+
+services:
+  app:
+    image: golang:1.23
+    container_name: music-service-app
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: go run ./main.go
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    env_file:
+      - config.env
+
+  db:
+    image: postgres:latest
+    container_name: music-service-db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: kim
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: music_service
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_data:
